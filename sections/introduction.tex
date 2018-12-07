@@ -1,1 +1,23 @@
 \section{Introduction}
+\subsection{Purpose}
+- what is the purpose of this capstone report
+\subsection{Similarity search introduction}
+- what is similarity search and why is it important?
+
+
+
+- what kinds of similarity measures can we use? ref nips submission
+\subsection{What is MCS}
+The maximum common subgraph (MCS) problem is a well-studied NP-hard problem \TODO{add some MCS refs} fundamental to graph theory. MCS has applications in \TODO{add applications and refs}. There are several forms of the base MCS problem that restrict the types of solutions that can be found, but the problem that has been explored the most by the graph theory community is the maximum common induced subgraph (MCIS) problem \cite{vismara2008finding}. The induced variant of the MCS problem requires that the MCS is induced, that is, every... \TODO{fix defn}. 
+
+Another variant that is compatible with all MCS definitions is connectedness. Connectedness requiers that the graph of the MCS solution is a connected graph. Combining this with the MCIS problem, this becomes the maximum common connected induced subgraph (MCCIS) problem. In this work, we focus on the MCCIS problem as opposed to the MCIS problem for computational efficiency. Adding connectedness is an additional constraint that can be used to prune an exact solver's search space, resulting in faster solution time and smaller solution sizes. Since this report focuses solely on MCCIS, we will refer to this problem simply as MCS for simplicity.
+
+\TODO{association graph definition? split into something?}
+There are two primary solution methods to the MCS problem: building a compatibility graph \TODO{add refs, levi, etc} and backtracking search \TODO{mcgregor}. 
+- solution types: association graph vs search methods (?)
+
+
+- existing work on MCS (mccreesh 2017)
+
+\subsection{Deep learning on graphs}
+- light intro on GCN
