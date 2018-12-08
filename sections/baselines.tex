@@ -1,5 +1,5 @@
 \section{Ground truth MCS development}
-\subsection{MCS generation process}
+\subsection{MCS solutions}
 Training a deep neural network in a supervised learning setting requires ground truth data to guide learning. In the case of graph similarity search, the input is two graphs $G_1$ and $G_2$, and the output is a similarity score $\phi(G_1, G_2) \in [0, 1]$, where $\phi = 1$ denotes isomorphic graphs and $\phi = 0$ denotes two graphs with no compatible node matchings. This report uses the normalized MCS (nMCS) as the similarity metric, given by $nMCS = \frac{MCS(G_1, G_2)}{(|G_1| + |G_2|)/2}$.
 
 In addition to the MCS between two graphs, we are also interested in the actual node mapping of the MCS solution. While the size of the MCS is typically the primary concern in the MCS problem, the node mapping itself can be useful for some applications and increases interpretability of the learned MCS solution.
@@ -10,8 +10,9 @@ Therefore, the ultimate goal of this project is the ability to produce the follo
 The algorithm used in this work to provide the ground truth MCS values is the MCSPLIT \TODO{?} algorithm provided by \TODO{names} \TODO{ref mccreesh}. The MCSPLIT algorithm is a \TODO{description}. It is a search algorithm capable of producing both an exact MCS mapping (provided sufficient computation time) as well as an approximate MCS mapping if terminated early. Since the MCS problem is NP-hard, having an approximate solution is crucial for evaluating solutions for larger graphs. In the case of search algorithms, the approximate solution is a valid common subgraph; it simply may not be the maximum of all common subgraphs, but instead a lower bound.
 
 \subsection{Datasets}
-MCS datasets are provided for three datasets, named \TODO{rename} AIDS, LINUX, and IMDB.
+MCS solutions are generated for three datasets, named \TODO{rename} AIDS, LINUX, and IMDB.
 
 AIDS is a dataset of ...
 LINUX is a dataset of ...
 IMDB is a dataset of ...
+\TODO{copy from yba paper stuff}
