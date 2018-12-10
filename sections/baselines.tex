@@ -1,18 +1,17 @@
 \section{Ground truth MCS development}
-\subsection{MCS solutions}
-Training a deep neural network in a supervised learning setting requires ground truth data to guide learning. In the case of graph similarity search, the input is two graphs $G_1$ and $G_2$, and the output is a similarity score $\phi(G_1, G_2) \in [0, 1]$, where $\phi = 1$ denotes isomorphic graphs and $\phi = 0$ denotes two graphs with no compatible node matchings. This report uses the normalized MCS (nMCS) as the similarity metric, given by $nMCS = \frac{MCS(G_1, G_2)}{(|G_1| + |G_2|)/2}$.
+\subsection{MCS Solutions}
+There are two primary outputs desired for the MCS solutions: the size of the MCS and the desired MCS mappings. Since MCS corresponds to the maximum subgraph, there is only a single value of MCS size. This value is sufficient for use in the deep learning model previously introduced. In addition to the MCS size, learning the MCS mapping may also be of interest for other tasks and for solution interpretability. However, while MCS size is unique for a pair of graphs, the MCS mapping may not be unique if there are multiple MCS with the same size. Due to limitations of the chosen implementation, we currently only provide a single valid MCS mapping rather than all MCS mappings. Therefore, we desire the ground truth solutions to contain two parts: 1) the unique MCS size and 2) a valid MCS mapping.
 
-In addition to the MCS between two graphs, we are also interested in the actual node mapping of the MCS solution. While the size of the MCS is typically the primary concern in the MCS problem, the node mapping itself can be useful for some applications and increases interpretability of the learned MCS solution.
+In order to use the ground truth solutions in the graph similarity search task, we require solutions for every graph pair that could occur at test time. For a test set containing $n$ database graphs and $k$ query graphs, this results in $n*k$ MCS computations. We precompute all graph pairs required at test time for computational efficiency and use this as a test set. We develop a training set from a separate set of graphs of size $r$ and precompute the MCS of all possible graph pair combinations, resulting in $r^2$ MCS computation.
 
-Therefore, the ultimate goal of this project is the ability to produce the following: given a database of graphs $\{G_1, G_2, ..., G_n\}$, for every combination of two graphs (totaling ${n \choose 2}$), provide the MCS of the pair as well as the node mapping from $G_1$ to $G_2$.
-
-\subsection{Baseline algorithm}
-The algorithm used in this work to provide the ground truth MCS values is the MCSPLIT \TODO{?} algorithm provided by \TODO{names} \TODO{ref mccreesh}. The MCSPLIT algorithm is a \TODO{description}. It is a search algorithm capable of producing both an exact MCS mapping (provided sufficient computation time) as well as an approximate MCS mapping if terminated early. Since the MCS problem is NP-hard, having an approximate solution is crucial for evaluating solutions for larger graphs. In the case of search algorithms, the approximate solution is a valid common subgraph; it simply may not be the maximum of all common subgraphs, but instead a lower bound.
+\subsection{Baseline Algorithm}
+The algorithm used in this work to provide the ground truth MCS values is the McSplit algorithm designed by McCreesh et al \cite{mccreesh2017partitioning}. The McSplit algorithm is an exact branch and bound search algorithm for the MCS problem capable of handling the labeled, directed, and connected variants. It only handles the induced version of the MCS problem, meaning it cannot handle the maximum common edge subgraph (MCES) problem. It is capable of producing both an exact MCS mapping (provided sufficient computation time) as well as an approximate MCS mapping under early search termination. The approximate solution provided is still a valid common subgraph since it is a search algorithm, so approximate solutions simply provide a lower bound on MCS. Since the MCS problem is NP-hard, having an approximate solution is crucial for evaluating solutions for larger graphs. In all cases such that more than one MCS exists, McSplit returns a single valid MCS rather than all solutions.
 
 \subsection{Datasets}
-MCS solutions are generated for three datasets, named \TODO{rename} AIDS, LINUX, and IMDB.
+MCS solutions are generated for three real-world datasets, named AIDS, LINUX, and IMDB.
 
-AIDS is a dataset of ...
-LINUX is a dataset of ...
-IMDB is a dataset of ...
-\TODO{copy from yba paper stuff}
+AIDS is a chemical compound dataset containing 42,687 compounds with hydrogen atoms omitted. The dataset used is a random selection of 700 graphs with 10 or fewer nodes. This is a labeled dataset with atoms as nodes labeled with the element type and bonds as edges with unit weight.
+
+LINUX \cite{wang2012efficient} is a dataset of 48,747 program dependence graphs from the Linux kernel. The dataset used is a random selection of 1000 graphs with 10 or fewer nodes. This is an unlabeled dataset with statements represented as nodes and dependencies represented as edges.
+
+IMDB \cite{yanardag2015deep} is a dataset of ego-networks of movie actors/actresses. It consists of 1500 graphs of varying sizes, the largest of which contains 88 nodes. This is an unlabeled dataset with people represented as nodes and "in the same movie" relationships represented as edges.

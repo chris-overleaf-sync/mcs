@@ -1,6 +1,6 @@
 \section{Experiments}
 \subsection{Optimal solution verification}
-In all cases, interface code was written so that the original author's code could be run without modification. Two methods were used to verify solution correctness: 1. manual visual verification of results for hundreds of random graph pairs and 2. solution size verification against a second algorithm. The first method is used primarily as a sanity check to ensure that the algorithm makes sense. An example of the output MCS solution is below. 
+In all cases, interface code was written so that the original author's code could be run without modification. Two methods were used to verify solution correctness: 1. manual visual verification of results for approximately 100 random graph pairs and 2. solution size verification against a second algorithm. The first method is used primarily as a sanity check on code integration. An example of the output MCS solution is below. 
 
 \TODO{insert sample image of highlighted MCS mappings}
 
@@ -23,7 +23,7 @@ For small graphs (the AIDS and LINUX datasets), the MCSPLIT algorithm solves all
 \TODO{average mcs statistics (what is avg size of graphs and mcs size)}
 
 \subsection{Trained AAAI model and results}
-We adopt an existing architecture that has been shown to successfully learn the Graph Edit Distance (GED) problem as a similarity metric \cite{bai2018convolutional}, but swap the ground truth GED solutions with MCS. This architecture uses multiple Graph Convolutional Network (GCN) operations \cite{kipf2016semi} and extracts pairwise node similarity matrices after each GCN operation \TODO{model description}.
+
 
 Following the results in \cite{bai2018convolutional}, we evaluate the model on the task of similarity search, where the similarity metric is the nMCS. We use mean squared error (mse), Kendall's Rank Correlation Coefficient $\tau$ \cite{kendall1938new}, Spearman's Rank Correlation Coefficient $\rho$ \cite{spearman1904proof}, and Precision at k (p@k) to evaluate the model. Rather than develop a new model to specifically learn the MCS problem, this work is focused on showing that MCS is a reasonable metric for similarity search and is learnable with an existing model.
 
