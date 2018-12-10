@@ -24,6 +24,39 @@ The noisiness in the data exists due to the dataset analyzed. Some input graphs 
 Following the results in \cite{bai2018convolutional}, we train a model on the task of similarity search, where the similarity metric is the nMCS. We use mean squared error (mse), Kendall's Rank Correlation Coefficient $\tau$ \cite{kendall1938new}, Spearman's Rank Correlation Coefficient $\rho$ \cite{spearman1904proof}, and Precision at k (p@k) to evaluate the model. It should be noted that rather than develop a new model to specifically learn the MCS problem, this work is focused on showing that MCS is a reasonable metric for similarity search and is learnable with an existing state-of-the-art model.
 
 
+\begin{table}
+% AIDS.
+  \center
+  \caption{Results on AIDS}
+  \label{table:aids}
+\begin{tabular}{|c|P{1.6cm}|P{1.6cm}|P{1.6cm}|P{1.6cm}|P{1.6cm}|}
+
+\hline
+ & $\mathrm{mse}(10^{-3})$ & $\rho$ & $\tau$ & p@10 & p@20 \\
+\hline
+GSimCNN (GED) & 3.16 & 0.84 &  & 1 & \\
+\hline
+GSimCNN (MCS) &  &  &  &  & \\
+\hline
+\end{tabular}
+
+\bigskip
+
+% LINUX.
+  \center
+  \caption{Results on LINUX}
+  \label{table:linux}
+\begin{tabular}{|c|c|c|c|c|c|}
+
+\hline
+ & $\mathrm{mse}(10^{-3})$ & $\rho$ & $\tau$ & p@10 & p@20 \\
+\hline
+GSimCNN (GED) &  &  &  &  & \\
+\hline
+GSimCNN (MCS) &  &  &  &  & \\
+\hline
+\end{tabular}
+\end{table}
 
 - include the standard plot results
 
