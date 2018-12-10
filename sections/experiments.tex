@@ -1,13 +1,27 @@
 \section{Experiments}
-\subsection{Optimal solution verification}
-In all cases, interface code was written so that the original author's code could be run without modification. Two methods were used to verify solution correctness: 1. manual visual verification of results for approximately 100 random graph pairs and 2. solution size verification against a second algorithm. The first method is used primarily as a sanity check on code integration. An example of the output MCS solution is below. 
+\subsection{Optimal Solution Verification}
+In all cases, interface code was written so that the original author's code could be run without modification. Two methods were used to verify solution correctness: 1. manual visual verification of results for approximately 100 random graph pairs and 2. solution size verification against a second algorithm. The first method is used primarily as a sanity check on code integration. An example of the output MCS solution is shown in Figures \ref{fig:aids-mcs} and \ref{fig:linux-mcs}. 
 
-\TODO{insert sample image of highlighted MCS mappings}
+\begin{figure}[!tbp]
+    \centering
+    \begin{minipage}[b]{0.4\textwidth}
+        \includegraphics{figures/mcs-example-aids.png}
+        \caption{Example AIDS MCS}
+        \label{fig:aids-mcs}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.4\textwidth}
+        \includegraphics{figures/mcs-example-linux.png}
+        \caption{Example LINUX MCS}
+        \label{fig:linux-mcs}
+    \end{minipage}
+\end{figure}
 
-The second method follows the rationale that if multiple "optimal" search algorithms agree, then the algorithms are likely to be correct \cite{korf2014you}. We verify these results by using a second algorithm \cite{mccreesh2016clique} to solve the same MCS problem and compare the solution sizes. It should be noted that these algorithms output a single optimal mapping. As a result, while the mappings may differ between algorithms, we verify correctness using the MCS size. We use the author's original implementation and verified that for all three datasets (AIDS, LINUX, and IMDB), that the two solutions sizes are consistent.
 
-\subsection{Baseline output stats}
-Since we would like to train a network to predict the MCS of two graphs, we need to quantify the limits of the current state of the art algorithms. Following existing methods to quantify solution speed \cite{hoffmann2018observations}, we look at the percentage of MCS graph pairs that can be optimally solved in a given time limit, as a function of pairwise graph size, as shown in Figure \ref{fig:solution_limits}. The pairwise graph size metric used is the minimum number of nodes in either graph of the graph pair. For small graphs (the AIDS and LINUX datasets), the McSpilt algorithm solves all instances in less than 1 second. Therefore, we analyze the IMDB dataset, setting a time limit of 1 minute for every solution.
+The second method follows the rationale that if multiple optimal search algorithms agree, then the algorithms are likely to be correct \cite{korf2014you}. We verify these results by using a second algorithm \cite{mccreesh2016clique} to solve the same MCS problem and compare the solution sizes. It should be noted that these algorithms output a single optimal mapping. As a result, while the mappings may differ between algorithms, we verify correctness using the MCS size. We use the author's original implementation and verified that for all three datasets (AIDS, LINUX, and IMDB), the two solutions sizes are consistent.
+
+\subsection{Exact Solution Practical Limits}
+Since we would like to train a network to predict the MCS of two graphs, we need to quantify the limits of the current state-of-the-art algorithms. Following existing methods to quantify solution speed \cite{hoffmann2018observations}, we look at the percentage of MCS graph pairs that can be optimally solved in a given time limit, as a function of pairwise graph size, as shown in Figure \ref{fig:solution_limits}. The pairwise graph size metric used is the minimum number of nodes in either graph of the graph pair. For small graphs (the AIDS and LINUX datasets), the McSpilt algorithm solves all instances in less than 1 second. Therefore, we analyze the IMDB dataset, setting a time limit of 1 minute for every solution.
 
 \begin{figure}
     \center
@@ -20,7 +34,7 @@ As expected, there is a general downwards trend of percent of pairs solved for i
 
 The noisiness in the data exists due to the dataset analyzed. Some input graphs are easy for the exact solver, and since the dataset has a limited number of large graphs, easy solutions skew the data towards 100\%. This is particularly noticeable for graph size = 89, in which all pairs were solved for that graph size. IMDB contains only 1 graph of size 89 which happens to have this quality, so all solution pairs involving that graph are solved.
 
-\subsection{Trained AAAI model and results}
+\subsection{Learning MCS Using GSimCNN}
 Following the results in \cite{bai2018convolutional}, we train a model on the task of similarity search, where the similarity metric is the nMCS. We use mean squared error (mse), Kendall's Rank Correlation Coefficient $\tau$ \cite{kendall1938new}, Spearman's Rank Correlation Coefficient $\rho$ \cite{spearman1904proof}, and Precision at k (p@k) to evaluate the model. It should be noted that rather than develop a new model to specifically learn the MCS problem, this work is focused on showing that MCS is a reasonable metric for similarity search and is learnable with an existing state-of-the-art model.
 
 
@@ -34,9 +48,9 @@ Following the results in \cite{bai2018convolutional}, we train a model on the ta
 \hline
  & $\mathrm{mse}(10^{-3})$ & $\rho$ & $\tau$ & p@10 & p@20 \\
 \hline
-GSimCNN (GED) & 3.16 & 0.84 &  & 1 & \\
+GSimCNN (GED) & 0.807 & 0.863 & 0.714 & 0.514 & 0.580 \\
 \hline
-GSimCNN (MCS) &  &  &  &  & \\
+GSimCNN (MCS) & 3.159 & 0.843 & 0.692 & 0.462 & 0.516 \\
 \hline
 \end{tabular}
 
@@ -46,19 +60,30 @@ GSimCNN (MCS) &  &  &  &  & \\
   \center
   \caption{Results on LINUX}
   \label{table:linux}
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{tabular}{|c|P{1.6cm}|P{1.6cm}|P{1.6cm}|P{1.6cm}|P{1.6cm}|}
 
 \hline
  & $\mathrm{mse}(10^{-3})$ & $\rho$ & $\tau$ & p@10 & p@20 \\
 \hline
-GSimCNN (GED) &  &  &  &  & \\
+GSimCNN (GED) & 0.141 & 0.988 & 0.951 & 0.983 & 0.961 \\
 \hline
-GSimCNN (MCS) &  &  &  &  & \\
+GSimCNN (MCS) & 0.212 & 0.958 & 0.901 & 0.9185  & 0.925 \\
 \hline
 \end{tabular}
 \end{table}
 
-- include the standard plot results
+Results for training on AIDS are shown in Table \ref{table:aids} and results for training on LINUX are shown in Table \ref{table:linux}. The results for GED and MCS are comparable using the same architecture, with MCS performing slightly worse in all evaluation metrics. This indicates that MCS is also a learnable similarity metric for the GSimCNN architecture. Similarity rankings used in the calculation of Kendall's tau and Spearman's rho are also shown in Figures \ref{fig:ranking_aids} and \ref{fig:ranking_linux}.
 
-- include some sample ranking results
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/query_demo_aids700nef_mccreesh2017_15_norm.png}
+    \caption{Ranking results for AIDS dataset, ground truth (top) and learned model (bottom)}
+    \label{fig:ranking_aids}
+\end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/query_demo_linux_mccreesh2017_35_norm.png}
+    \caption{Ranking results for LINUX dataset, ground truth (top) and learned model (bottom)}
+    \label{fig:ranking_linux}
+\end{figure}

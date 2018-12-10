@@ -1,19 +1,12 @@
 \section{Introduction}
-\subsection{Purpose}
-Maybe no include.
-
-- what is the purpose of this capstone report
-
 \subsection{Maximum Common Subgraph}
 The maximum common subgraph (MCS) problem is a well-studied NP-hard problem \cite{bunke1997relation, mcgregor1982backtrack, levi1973note, kann1992approximability} fundamental to graph theory. MCS has many application domains including chemistry \cite{duesbury2018comparison}, network analysis \cite{larsen2017cytomcs}, and computer vision \cite{bunke1998graph}. There are several forms of the base MCS problem that restrict the types of solutions that can be found, but the problem that has been explored the most by the graph theory community is the maximum common induced subgraph (MCIS) problem \cite{vismara2008finding}. An induced subgraph is defined as follows:
 
-A undirected, unlabeled graph $G$ is defined by its vertices $V$ and edges $E$: $G = (V, E)$. A graph $H = (V', E')$ is a subgraph of graph $G$ iff $V' \subseteq V$ and $E' \subseteq E \cap (V' X V')$. Graph $H$ is instead an induced subgraph of $G$ if $E' = E \cap (V' X V')$. In words, the induced condition requires that if two nodes in $H$ share an edge in $G$, then they must share an edge in $H$ as well. 
-
-\TODO{add a figure to illustrate induced vs non-induced}
+A undirected, unlabeled graph $G$ is defined by its vertices $V$ and edges $E$: $G = (V, E)$. A graph $H = (V', E')$ is a subgraph of graph $G$ iff $V' \subseteq V$ and $E' \subseteq E \cap (V' \times V')$. Graph $H$ is instead an induced subgraph of $G$ if $E' = E \cap (V' \times V')$. In words, the induced condition requires that if two nodes in $H$ share an edge in $G$, then they must share an edge in $H$ as well. 
 
 Given this definition, the MCIS problem is, given two graphs $G_1$ and $G_2$, find the largest induced subgraph of $G_1$ that is also an induced subgraph of $G_2$. 
 
-Another variant that is compatible with all MCS definitions is connectedness. Connectedness requiers that the graph of the MCS solution is a connected graph. Combining this with the MCIS problem, this becomes the maximum common connected induced subgraph (MCCIS) problem. In this work, we focus on the MCCIS problem as opposed to the MCIS problem for computational efficiency. Adding connectedness is an additional constraint that can be used to prune an exact solver's search space, resulting in faster solution time and smaller solution sizes. Since this report focuses solely on MCCIS, we will refer to this problem as MCS for simplicity.
+Another variant that is compatible with all MCS definitions is connectedness. Connectedness requires that the graph of the MCS solution is a connected graph. Combining this with the MCIS problem, this becomes the maximum common connected induced subgraph (MCCIS) problem. In this work, we focus on the MCCIS problem as opposed to the MCIS problem for computational efficiency. Adding connectedness is an additional constraint that can be used to prune an exact solver's search space, resulting in faster solution time and smaller solution sizes. Since this work focuses solely on MCCIS, we will refer to this problem as MCS for simplicity.
 
 \subsection{Graph Similarity Search}
 Graph similarity search is the problem of finding the "most similar" graph in a database of graphs given an input query graph. That is, given a query graph $G_q$, a database of $n$ graphs $D = \{G_1, G_2, ..., G_n\}$ and a similarity mapping function $\phi: G \times G \rightarrow [0, 1]$, determine the following:
@@ -27,11 +20,3 @@ $$ nMCS(G_1, G_2) = \frac{2 * MCS(G_1, G_2)}{|V_1| + |V_2|} $$
 
 \subsection{Learning MCS}
 Although the purpose of this work is to develop ground truth solutions to the MCS problem for existing graph databases, we also evaluate the usage of nMCS as a similarity metric for the similarity search task. Therefore, we use the ground truth MCS solutions developed in a supervised learning setting to learn the MCS function. We adopt an existing architecture that has been shown to successfully learn the Graph Edit Distance (GED) problem as a similarity metric \cite{bai2018convolutional}, but swap the ground truth GED solutions with MCS. This deep neural network architecture uses multiple Graph Convolutional Network (GCN) operations \cite{kipf2016semi}, extracts node-node similarity matrices after each GCN operation, and feeds the resulting similarity matrices into conventional Convolutional Neural Network (CNN) layers. This model outputs a predicted similarity score, which can be used in the similarity search task or transformed back into the predicted MCS solution for the graph pair.
-
-\subsection{Background info gathered form research?}
-\TODO{association graph definition? split into something?}
-There are two primary solution methods to the MCS problem: building a compatibility graph \TODO{add refs, levi, etc} and backtracking search \TODO{mcgregor}. 
-- solution types: association graph vs search methods (?)
-
-
-- existing work on MCS (mccreesh 2017)
